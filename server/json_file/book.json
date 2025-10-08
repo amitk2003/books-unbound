@@ -1,0 +1,92 @@
+[
+    {
+    "url":"https://atoms.jamesclear.com/",
+    "title":"Atomic Habits",
+    "author":"James Clear",
+    "price":1000,
+    "desc":"A self-improvement book that provides actionable strategies to build good habits, break bad ones, and master the tiny behaviors that lead to remarkable results.",
+    "language":"English"
+  },
+    {
+      "url": "https://en.wikipedia.org/wiki/Nineteen_Eighty-Four",
+      "title": "1984",
+      "author": "George Orwell",
+      "price": 912,
+      "desc": "A dystopian novel set in a totalitarian society ruled by Big Brother.",
+      "language": "English"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/To_Kill_a_Mockingbird",
+      "title": "To Kill a Mockingbird",
+      "author": "Harper Lee",
+      "price": 1079,
+      "desc": "A novel about racial injustice and moral growth in the American South.",
+      "language": "English"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/Godan",
+      "title": "गोदान (Godan)",
+      "author": "Munshi Premchand",
+      "price": 250,
+      "desc": "A Hindi novel about the struggles of Indian farmers and social issues.",
+      "language": "Hindi"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/Raag_Darbari",
+      "title": "राग दरबारी (Raag Darbari)",
+      "author": "Shrilal Shukla",
+      "price": 300,
+      "desc": "A satirical Hindi novel depicting the political and social realities of rural India.",
+      "language": "Hindi"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/Norwegian_Wood_(novel)",
+      "title": "ノルウェイの森 (Norwegian Wood)",
+      "author": "Haruki Murakami",
+      "price": 1500,
+      "desc": "A Japanese coming-of-age novel dealing with love and loss.",
+      "language": "Japanese"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/The_Tale_of_Genji",
+      "title": "源氏物語 (The Tale of Genji)",
+      "author": "Murasaki Shikibu",
+      "price": 2000,
+      "desc": "A classic Japanese novel often considered the world’s first full-length novel.",
+      "language": "Japanese"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/Pride_and_Prejudice",
+      "title": "Pride and Prejudice",
+      "author": "Jane Austen",
+      "price": 829,
+      "desc": "A classic romance novel about love, class, and social expectations.",
+      "language": "English"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/Madhushala",
+      "title": "मधुशाला (Madhushala)",
+      "author": "Harivansh Rai Bachchan",
+      "price": 200,
+      "desc": "A famous Hindi poetry book symbolizing life as a tavern and its challenges.",
+      "language": "Hindi"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/I_Am_a_Cat",
+      "title": "吾輩は猫である (I Am a Cat)",
+      "author": "Natsume Sōseki",
+      "price": 1800,
+      "desc": "A satirical Japanese novel narrated by a stray cat observing human society.",
+      "language": "Japanese"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/The_Great_Gatsby",
+      "title": "The Great Gatsby",
+      "author": "F. Scott Fitzgerald",
+      "price": 955,
+      "desc": "A novel about wealth, love, and the American Dream during the Jazz Age.",
+      "language": "English"
+    }
+  
+  
+  ]
