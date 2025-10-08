@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 📚 Books Unbound
 
 ## 🧭 Overview
@@ -45,3 +46,4 @@ Example:
 ```markdown
 ![Homepage Screenshot](./screenshots/homepage.png)
 ![Cart Screenshot](./screenshots/cart.png)
+
