@@ -77,7 +77,7 @@ export default function Footer() {
 
       {/* Copyright */}
       <div className="text-center text-sm text-gray-400 border-t border-gray-700 mt-8 pt-4">
-        © {year} Books Unbound. All rights reserved | Made with ❤️ by Amit Kumar
+        © {year} Books Unbound. All rights reserved | Made  by Amit Kumar
       </div>
     </footer>
   );

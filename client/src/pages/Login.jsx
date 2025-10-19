@@ -5,8 +5,9 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import {authActions} from  "../store/auth";
 import { useDispatch } from 'react-redux';
 import axios from 'axios'
+import { getBaseUrl } from '../utils/config.js';
 export default function Login() {
-   const BASE_URL=import.meta.env.MODE=='development'?'http://localhost:3000':'htps://books-unbound-fshw.vercel.app'
+  const BASE_URL=getBaseUrl()
   const dispatch=useDispatch();
   const [showPassword,setShowPassword]=useState(false);
   const navigate=useNavigate();

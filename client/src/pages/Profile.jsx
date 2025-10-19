@@ -4,7 +4,8 @@ import {Outlet} from 'react-router-dom'
 // import { useSelector } from 'react-redux'
 import axios from 'axios'
 import Loader from '../components/Loader/Loader'
-
+import { getBaseUrl } from '../utils/config.js';
+const BASE_URL=getBaseUrl()
 export default function Profile() {
   // const isLoggedIn= useSelector();
   const [profile,setProfile]=useState(null);
@@ -14,7 +15,7 @@ export default function Profile() {
    useEffect(()=>{
       const fetch=async()=>{
         try{
-          const response=await axios.get("http://localhost:3000/api/get-userInfo",{headers});
+          const response=await axios.get(BASE_URL+"/api/get-userInfo",{headers});
           console.log(response)
           setProfile(response.data)
         }catch(error){

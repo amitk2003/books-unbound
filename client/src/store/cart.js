@@ -1,19 +1,29 @@
 // src/store/cart.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-
+import { getBaseUrl } from '../utils/config.js';
+const BASE_URL=getBaseUrl()
 // Async thunk to fetch cart
 export const fetchCart = createAsyncThunk('cart/fetchCart', async (_, { getState, rejectWithValue }) => {
+
   try {
     const { auth } = getState();
     if (!auth.isLoggedIn) {
       return rejectWithValue('User not authenticated');
     }
+    const token=localStorage.getItem('token')
+    const userId=localStorage.getItem('id')
+    console.log('Fetching cart -Token exists?',!!token,'UserId: ',userId)
+    if(!token){
+      return rejectWithValue('No token in localStorage - please login');
+    }
     const headers = {
-      id: localStorage.getItem('id'),
-      authorization: `Bearer ${localStorage.getItem('token')}`,
+      // id: localStorage.getItem('id'),
+      
+      authorization: `Bearer ${'token'}`,
     };
-    const response = await axios.get('/api/get-user-cart', { headers });
+    console.log('Headers:',headers)
+    const response = await axios.get(BASE_URL+'/api/get-user-cart', { headers });
     return Array.isArray(response.data.data) ? response.data.data : [];
   } catch (error) {
     return rejectWithValue(error.response?.data?.message || 'Failed to fetch cart');
@@ -31,7 +41,7 @@ export const removeFromCart = createAsyncThunk('cart/removeFromCart', async (id,
       id: localStorage.getItem('id'),
       authorization: `Bearer ${localStorage.getItem('token')}`,
     };
-    const response = await axios.put(`/api/remove-book-from-cart/${id}`, {}, { headers });
+    const response = await axios.put(BASE_URL+`/api/remove-book-from-cart/${id}`, {}, { headers });
     return { id, message: response.data.message };
   } catch (error) {
     return rejectWithValue(error.response?.data?.message || 'Failed to remove item');
@@ -49,7 +59,7 @@ export const addToCart = createAsyncThunk('cart/addToCart', async (bookId, { get
       id: localStorage.getItem('id'),
       authorization: `Bearer ${localStorage.getItem('token')}`,
     };
-    await axios.post('/api/add-to-cart', { bookId }, { headers });
+    await axios.put(BASE_URL+'/api/add-to-cart', { bookId }, { headers });
     // Refresh cart after adding
     await dispatch(fetchCart()).unwrap();
     return { bookId };

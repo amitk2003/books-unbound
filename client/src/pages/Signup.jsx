@@ -4,8 +4,9 @@ import { Link } from 'react-router-dom';
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom'
+import { getBaseUrl } from '../utils/config.js';
 export default function Signup() {
-   const BASE_URL=import.meta.env.MODE=='development'?'http://localhost:3000':'htps://books-unbound-fshw.vercel.app'
+  const BASE_URL=getBaseUrl();
   const [showPassword,setShowPassword]=useState(false);
   const navigate=useNavigate();
   const [values,setValues]=useState({

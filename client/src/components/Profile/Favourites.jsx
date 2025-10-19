@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Bookcard from '../Bookcard/Bookcard.jsx';
-
+import { getBaseUrl } from '../../utils/config.js';
 const Favourites = () => {
   const [favouriteBook, setFavouriteBook] = useState([]);
-   const BASE_URL=import.meta.env.MODE=='development'?'http://localhost:3000':'htps://books-unbound-fshw.vercel.app'
   const headers = {
     id: localStorage.getItem("id"),
     authorization: `Bearer ${localStorage.getItem("token")}`,
   };
-
+  const BASE_URL=getBaseUrl()
   useEffect(() => {
     const fetch = async () => {
       try {

@@ -24,42 +24,41 @@ const Bookcard = ({ book }) => {
       }
     });
   };
+return (
+    <div className="bg-zinc-700 rounded p-4 flex flex-col h-auto sm:h-[80vh] w-full max-w-xs mx-auto">
+      
+      {/* Image */}
+      <Link to={`/view-book-details/${book._id}`} className="bg-zinc-600 rounded flex items-center justify-center overflow-hidden">
+        <img
+          src={book.url}
+          alt={book.title}
+          className="h-[25vh] sm:h-[40vh] w-full object-cover rounded"
+        />
+      </Link>
 
-  return (
-    <Link to={`/view-book-details/${book._id}`}>
-      <div className="bg-zinc-700 rounded p-5 flex flex-col h-[50vh] sm:h-[60vh] w-full max-w-xs mx-auto">
-        {/* Image */}
-        <div className="bg-zinc-600 rounded flex items-center justify-center">
-          <img
-            src={book.url}
-            alt={book.title}
-            className="h-[20vh] w-full object-cover rounded"
-          />
-        </div>
+      {/* Title */}
+      <h2 className="mt-3 text-lg sm:text-xl text-zinc-300 font-semibold truncate">
+        {book.title}
+      </h2>
 
-        {/* Title */}
-        <h2 className="mt-4 text-lg text-zinc-300 font-semibold truncate">
-          {book.title}
-        </h2>
+      {/* Author */}
+      <p className="mt-1 text-zinc-400 text-sm sm:text-base">by {book.author}</p>
 
-        {/* Author */}
-        <p className="mt-2 text-zinc-400">by {book.author}</p>
+      {/* Price */}
+      <p className="mt-2 text-zinc-200 font-semibold text-lg sm:text-xl">
+        {book.price}₹
+      </p>
 
-        {/* Price */}
-        <p className="mt-2 text-zinc-200 font-semibold text-lg">
-          {book.price}₹
-        </p>
-
-        {/* Add to Cart Button */}
-        <button
-          className="mt-4 bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
-          onClick={handleAddToCart}
-        >
-          Add to Cart
-        </button>
-      </div>
-    </Link>
+      {/* Add to Cart Button */}
+      <button
+        className="mt-auto bg-blue-500 text-white py-2 rounded hover:bg-blue-600 w-full text-sm sm:text-base"
+        onClick={handleAddToCart}
+      >
+        Add to Cart
+      </button>
+    </div>
   );
+ 
 };
 
 export default Bookcard;
