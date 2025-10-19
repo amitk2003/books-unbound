@@ -4,7 +4,7 @@ import Bookcard from '../Bookcard/Bookcard.jsx';
 
 const Favourites = () => {
   const [favouriteBook, setFavouriteBook] = useState([]);
-
+   const BASE_URL=import.meta.env.MODE=='development'?'http://localhost:3000':'htps://books-unbound-fshw.vercel.app'
   const headers = {
     id: localStorage.getItem("id"),
     authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -13,7 +13,7 @@ const Favourites = () => {
   useEffect(() => {
     const fetch = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/get-favourite-books", { headers });
+        const response = await axios.get(BASE_URL+"/api/get-favourite-books", { headers });
         setFavouriteBook(response.data.data);
         console.log(response.data);
       } catch (error) {

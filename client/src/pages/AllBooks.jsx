@@ -3,17 +3,19 @@ import Loader from "../components/Loader/Loader";
 import Bookcard from "../components/Bookcard/Bookcard";
 import axios from "axios";
 import { motion } from "framer-motion";
-
+import { configDotenv } from "dotenv";
 export default function AllBooks() {
   const [book, setBook] = useState();
-
+  const BASE_URL=import.meta.env.MODE=='development'?'http://localhost:3000':'htps://books-unbound-fshw.vercel.app'
+  
   useEffect(() => {
     const fetch = async () => {
-      const Response = await axios.get("http://localhost:3000/api/get-all");
+      const Response = await axios.get(BASE_URL+"/api/get-all");
       setBook(Response.data.data);
     };
     fetch();
   }, []);
+
 
   return (
     <div className="bg-zinc-900 px-5">

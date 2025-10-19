@@ -15,10 +15,11 @@ const ViewBookDetails = () => {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const role = useSelector((state) => state.auth.role);
   console.log(isLoggedIn, role);
+   const BASE_URL=import.meta.env.MODE=='development'?'http://localhost:3000':'htps://books-unbound-fshw.vercel.app'
   useEffect(() => {
     const fetch = async () => {
       const Response = await axios.get(
-        `http://localhost:3000/api/get-book-by-id/${id}`
+        BASE_URL+`/api/get-book-by-id/${id}`
       );
       console.log(Response);
       setBook(Response.data.data);
@@ -31,12 +32,12 @@ const ViewBookDetails = () => {
     bookid:id
   };
   const handleAddToFavourite = async () => {
-    const response=await axios.put("http://localhost:3000/api/add-book-to-favourite",{},{headers})
+    const response=await axios.put(BASE_URL+"/api/add-book-to-favourite",{},{headers})
     alert(response.data.message)
 
   }
   const handleAddToCart = async () => {
-    const response=await axios.put("http://localhost:3000/api/add-to-cart",{},{headers})
+    const response=await axios.put(BASE_URL+"/api/add-to-cart",{},{headers})
     alert(response.data.message)
   }
   return (

@@ -5,6 +5,7 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom'
 export default function Signup() {
+   const BASE_URL=import.meta.env.MODE=='development'?'http://localhost:3000':'htps://books-unbound-fshw.vercel.app'
   const [showPassword,setShowPassword]=useState(false);
   const navigate=useNavigate();
   const [values,setValues]=useState({
@@ -28,7 +29,7 @@ export default function Signup() {
       }
       // console.log(values)
       else{
-          const response = await axios.post("/api/sign-up", values);
+          const response = await axios.post(BASE_URL+"/api/sign-up", values);
           console.log(response.data);
           navigate('/login');
           if(response.status==200){

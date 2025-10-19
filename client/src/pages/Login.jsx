@@ -6,6 +6,7 @@ import {authActions} from  "../store/auth";
 import { useDispatch } from 'react-redux';
 import axios from 'axios'
 export default function Login() {
+   const BASE_URL=import.meta.env.MODE=='development'?'http://localhost:3000':'htps://books-unbound-fshw.vercel.app'
   const dispatch=useDispatch();
   const [showPassword,setShowPassword]=useState(false);
   const navigate=useNavigate();
@@ -22,7 +23,7 @@ export default function Login() {
       return;
     }
 
-    const response = await axios.post("http://localhost:3000/api/login", values);
+    const response = await axios.post(BASE_URL+"/api/login", values);
 
     if (response.status === 200) {
       dispatch(authActions.login());

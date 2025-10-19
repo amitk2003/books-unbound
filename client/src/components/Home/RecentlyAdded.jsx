@@ -7,11 +7,11 @@ import { motion } from "framer-motion";
 export default function RecentlyAdded() {
   const [book, setBook] = useState([]); // ✅ start as empty array
   const [loading, setLoading] = useState(true); // ✅ loading state
-
+    const BASE_URL=import.meta.env.MODE=='development'?'http://localhost:3000':'htps://books-unbound-fshw.vercel.app'
   useEffect(() => {
     const fetch = async () => {
       try {
-        const Response = await axios.get("http://localhost:3000/api/get-recent-book");
+        const Response = await axios.get(BASE_URL+"/api/get-recent-book");
         setBook(Response.data.data || []); // ✅ safe fallback
       } catch (error) {
         console.error("Error fetching recent books:", error);
