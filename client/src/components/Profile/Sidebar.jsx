@@ -1,15 +1,22 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link ,useNavigate} from 'react-router-dom';
 import { FaArrowRightFromBracket, FaBars } from 'react-icons/fa6';
+import {useDispatch} from "react-redux"
+import { authActions} from "../../store/auth.js"
 
 const Sidebar = ({ data }) => {
+  const dispatch=useDispatch();
+  const history=useNavigate()
   const [isOpen, setIsOpen] = useState(false);
 
   const handleLogout = () => {
+    dispatch(authActions.logout())
+    dispatch(authActions.changeRole("user"))
     localStorage.clear();
-    window.location.href = "/login";
-  };
+    history("/login");
 
+  };
+ 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
@@ -44,7 +51,17 @@ const Sidebar = ({ data }) => {
           Settings
         </Link>
       </div>
+      <button className='bg-zinc-900 w-3/6 lg:w-full mt-4 lg:mt-0 text-white font-semibold flex items-center justify-center' onClick={()=>{
+        dispatch(authActions.logout());
+        dispatch(authActions.changeRole("user"));
+        localStorage.removeItem("id");
+        localStorage.removeItem("token")
+        localStorage.removeItem("role");
+        history("/")
 
+      }}>
+
+      </button>
       <button onClick={handleLogout} className='bg-zinc-900 w-full mt-4 text-white font-semibold flex items-center justify-between hover:bg-zinc-700 transition-all duration-300 py-2 px-4 rounded'>
         Log Out <FaArrowRightFromBracket className='ml-2' />
       </button>

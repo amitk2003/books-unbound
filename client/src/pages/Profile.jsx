@@ -1,31 +1,37 @@
 import React,{useEffect,useState} from 'react'
-import Sidebar from '../components/Profile/Sidebar'
+import Sidebar from '../components/Profile/Sidebar.jsx'
 import {Outlet} from 'react-router-dom'
 // import { useSelector } from 'react-redux'
 import axios from 'axios'
-import Loader from '../components/Loader/Loader'
+import Loader from '../components/Loader/Loader.jsx'
 import { getBaseUrl } from '../utils/config.js';
-const BASE_URL=getBaseUrl()
+// const BASE_URL=getBaseUrl()
 export default function Profile() {
   // const isLoggedIn= useSelector();
   const [profile,setProfile]=useState(null);
   const headers={
-    id:localStorage.getItem("id"),authorization:`Bearer ${localStorage.getItem("token")}`
+    "id":localStorage.getItem("id"),
+    "Authorization":`Bearer ${localStorage.getItem("token")}`
   };
-   useEffect(()=>{
-      const fetch=async()=>{
-        try{
-          const response=await axios.get(BASE_URL+"/api/get-userInfo",{headers});
-          console.log(response)
-          setProfile(response.data)
-        }catch(error){
-        console.error("Error fetching order history:", error);
+   useEffect(() => {
+  const fetchProfile = async () => {
+    try {
+      const response = await axios.get("http://localhost:3000/api/get-userInfo", {
+        headers: {
+          "id": localStorage.getItem("id"),
+          "Authorization": `Bearer ${localStorage.getItem("token")}`
         }
-        // console.log(err);
-      
-      }
-      fetch();
-      },[])
+      });
+
+      setProfile(response.data); // ✔ DIRECT data, not response.data.data
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  fetchProfile();
+}, []);
+
   return (
     <div className='bg-zinc-900 px-2 md:px-12 flex flex-col md:flex-row h-screen py-15 gap-8'>
       

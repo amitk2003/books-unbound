@@ -9,8 +9,9 @@ cart_route.put("/add-to-cart", authToken, async (req, res) => {
   try {
     const { bookid } = req.body; // bookid should come from body now
     const userId = req.user.id;  // extracted from token by authToken
-
+    console.log("user id:",userId,"Book id:",bookid);
     const userdata = await User.findById(userId);
+    console.log("User data:",userdata);
 
     if (!userdata) {
       return res.status(404).json({ message: "User not found" });
@@ -35,6 +36,7 @@ cart_route.put("/remove-book-from-cart/:bookid", authToken, async (req, res) => 
   try {
     const { bookid } = req.params;
     const userId = req.user.id;
+    console.log(userId,bookid)
 
     const userdata = await User.findById(userId);
 
@@ -61,8 +63,8 @@ cart_route.get("/get-user-cart", authToken, async (req, res) => {
     const userData = await User.findById(userId).populate("cart");
     console.log(userId,userData);
 
-    if (!userData) {
-      return res.status(404).json({ message: "User not found" });
+    if (!req.user) {
+      return res.status(403).json({ message: "Invalid token" });
     }
 
     // const cart_data = userData.cart.reverse(); // latest first

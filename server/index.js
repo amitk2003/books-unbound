@@ -17,16 +17,22 @@ app.use(bodyParser.urlencoded({extended:true}));
 app.use(express.json());
 app.use(
     cors({
-      origin:[ "http://localhost:5173","https://books.unbound.vercel.app"], // Change this to your frontend URL
-      methods: "GET,POST,PUT,DELETE",
+      origin:["http://localhost:5173","http://localhost:3000"], // Change this to your frontend URL
+      methods: ['GET','POST','PUT','DELETE','Options'],
       credentials: true,
+      allowedHeaders: ['Content-Type', 'Authorization', 'id']
     })
   );
+  app.options('*',cors())
 // to access backend url resources
 app.get("/",(req,res)=>{
     return res.status(200).send("welcome to book store app");
     // console.log("welcome to book store app");
 })
+app.use((req, res, next) => {
+  res.set('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
+  next();
+});
 app.use("/api",router);
 app.use("/api",book);
 // app.use("/api",book1);

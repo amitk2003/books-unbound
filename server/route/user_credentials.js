@@ -1,53 +1,96 @@
 import express from "express";
 // AS EXPRESS is library and router is functionality of express thats why we are calling as express.router
 import User from "../model/User_schema.js"
+import dotenv from 'dotenv'
+dotenv.config()
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken"
 import authToken from "./userAuthtoken.js";
+const secret_code=process.env.JWT_AUTH_TOKEN
 // const jwtsecret="rbgu4t76@#$%^&*()_)(*&^%$123vbnmkli87655";
 import {OAuth2Client} from "google-auth-library";
 
 const router=express.Router();
 const googleClient=new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
-router.post('/sign-up/google',async(req,res)=>{
-    const {token}=req.body;
-    if(!token) return res.status(400).json({success:false,error:'No token provided'});
-    try{
-        const ticket=await googleClient.verifyIdToken({
-            idToken:token,
-            audience:process.env.GOOGLE_CLIENT_ID
-        })
-        const payload=ticket.getPayload()
-        const email=payload.email;
-        let ExistingUser=await User.findOne({email})
-        if(!ExistingUser) return res.status(400).json({success:false,message:"user already exists"});
-        const user= await User.create({
-            Username:payload.name,
-            Email:payload.email,
-            password:"",
-            address:""
-        })
-        const jwtPayload={
-            id:user._id,
-            email:user.email,
-            role:user.role
-    }
-     const authToken = jwt.sign(jwtPayload, "bookstore234", { expiresIn: "100d" });
+// router.post('/sign-up/google',async(req,res)=>{
+//     const {token}=req.body;
+//     if(!token) return res.status(400).json({success:false,error:'No token provided'});
+//     try{
+//         const ticket=await googleClient.verifyIdToken({
+//             idToken:token,
+//             audience:process.env.GOOGLE_CLIENT_ID
+//         })
+//         const payload=ticket.getPayload()
+//         const email=payload.email;
+//         let ExistingUser=await User.findOne({Email: email})
+//         if(ExistingUser) return res.status(400).json({success:false,message:"user already exists"});
+//         const user= await User.create({
+//             Username:payload.name,
+//             Email:payload.email,
+//             password:"",
+//             address:""
+//         })
+//         const jwtPayload={
+//             id:user._id,
+//             Email:user.Email,
+//             role:user.role
+//     }
+//      const authToken = jwt.sign(jwtPayload, secret_code, { expiresIn: "400d" });
 
-    return res.status(200).json({
-      id: user._id,
-      role: user.role,
-      token: authToken,
-      success:true
-    });
-  } catch (error) {
-    console.error("Google sign-up error", error.message,error.stack);
-    return res.status(401).json({ success: false, error: "invalid google client id" });
-  }
-});
-router.post('/sign-in/google',async(req,res)=>{
+//     return res.status(200).json({
+//       id: user._id,
+//       role: user.role,
+//       token: authToken,
+//       success:true
+//     });
+//   } catch (error) {
+//     console.error("Google sign-up error", error.message,error.stack);
+//     return res.status(401).json({ success: false, error: "invalid google client id" });
+//   }
+// });
+// router.post('/sign-in/google',async(req,res)=>{
+//     const {token}=req.body;
+//     if(!token) return res.status(400).json({success:false,error:'No token provided'});
+//     try{
+//         const ticket=await googleClient.verifyIdToken({
+//             idToken:token,
+//             audience:process.env.GOOGLE_CLIENT_ID
+//         })
+//         const payload=ticket.getPayload()
+//         const email=payload.email;
+//         let ExistingUser=await User.findOne({Email: email})
+//         if(!ExistingUser) return res.status(400).json({success:false,message:"user does not exists"});
+//         const jwtPayload={
+//             id:ExistingUser._id,
+//             Email:ExistingUser.Email,
+//             role:ExistingUser.role
+//         }
+//         const authToken = jwt.sign(jwtPayload, secret_code, { expiresIn: "400d" });
 
-})
+//         return res.status(200).json({
+//             id: ExistingUser._id,
+//             role: ExistingUser.role,
+//             token: authToken,
+//             success:true
+//         });
+//     } catch (error) {
+//         console.error("Google sign-in error", error.message,error.stack);
+//         return res.status(401).json({ success: false, error: "invalid google client id" });
+//     }
+// })
+
+
+
+
+
+
+
+
+
+
+
+
+
 router.post("/sign-up",async(req,res)=>{
 try{
     const {Username,Email,password,address}=req.body;
@@ -114,7 +157,7 @@ router.post("/login", async (req, res) => {
       role: ExistingUser.role,
     };
 
-    const token = jwt.sign(payload, "bookstore234", { expiresIn: "100d" });
+    const token = jwt.sign(payload, secret_code, { expiresIn: "400d" });
 
     return res.status(200).json({
       id: ExistingUser._id,
@@ -184,4 +227,3 @@ router.put("/forget-password",authToken,async(req,res)=>{
 })
 
 export default router;
-

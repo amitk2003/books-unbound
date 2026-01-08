@@ -42,10 +42,13 @@ fav.get("/get-favourite-books",authToken,async(req,res)=>{
     try{
         const {id }=req.headers;
         const user_data=await User.findById(id).populate("favourites");
-        const favouriteBooks= user_data.favourites;
+        if(!user_data){
+            return res.status(404).json({status:"error",message:"User not found"})
+        }
+       
         return res.json({
             status:"success",
-            data:favouriteBooks
+            data:user_data.favourites
             // why we send only data as favourite boks because if we pass whole data . there is chances of data loss
         });
 

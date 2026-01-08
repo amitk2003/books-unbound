@@ -11,7 +11,7 @@ export default function AllBooks() {
   const BASE_URL=getBaseUrl()
   useEffect(() => {
     const fetch = async () => {
-      const Response = await axios.get(BASE_URL+"/api/get-all");
+      const Response = await axios.get("http://localhost:3000/api/get-all");
       setBook(Response.data.data);
     };
     fetch();

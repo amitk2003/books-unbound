@@ -1,75 +1,112 @@
 // src/store/cart.js
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
-import { getBaseUrl } from '../utils/config.js';
-const BASE_URL=getBaseUrl()
-// Async thunk to fetch cart
-export const fetchCart = createAsyncThunk('cart/fetchCart', async (_, { getState, rejectWithValue }) => {
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
+import { getBaseUrl } from "../utils/config.js";
 
-  try {
-    const { auth } = getState();
-    if (!auth.isLoggedIn) {
-      return rejectWithValue('User not authenticated');
-    }
-    const token=localStorage.getItem('token')
-    const userId=localStorage.getItem('id')
-    console.log('Fetching cart -Token exists?',!!token,'UserId: ',userId)
-    if(!token){
-      return rejectWithValue('No token in localStorage - please login');
-    }
-    const headers = {
-      // id: localStorage.getItem('id'),
-      
-      authorization: `Bearer ${'token'}`,
-    };
-    console.log('Headers:',headers)
-    const response = await axios.get(BASE_URL+'/api/get-user-cart', { headers });
-    return Array.isArray(response.data.data) ? response.data.data : [];
-  } catch (error) {
-    return rejectWithValue(error.response?.data?.message || 'Failed to fetch cart');
-  }
-});
+const BASE_URL = getBaseUrl();
 
-// Async thunk to remove item from cart
-export const removeFromCart = createAsyncThunk('cart/removeFromCart', async (id, { getState, rejectWithValue }) => {
-  try {
-    const { auth } = getState();
-    if (!auth.isLoggedIn) {
-      return rejectWithValue('User not authenticated');
-    }
-    const headers = {
-      id: localStorage.getItem('id'),
-      authorization: `Bearer ${localStorage.getItem('token')}`,
-    };
-    const response = await axios.put(BASE_URL+`/api/remove-book-from-cart/${id}`, {}, { headers });
-    return { id, message: response.data.message };
-  } catch (error) {
-    return rejectWithValue(error.response?.data?.message || 'Failed to remove item');
-  }
-});
+// Fetch Cart Items
+export const fetchCart = createAsyncThunk(
+  "cart/fetchCart",
+  async (_, { getState, rejectWithValue }) => {
+    try {
+      const { auth } = getState();
+      const token = localStorage.getItem("token");
+      const userId = localStorage.getItem("id");
 
-// Async thunk to add item to cart
-export const addToCart = createAsyncThunk('cart/addToCart', async (bookId, { getState, rejectWithValue, dispatch }) => {
-  try {
-    const { auth } = getState();
-    if (!auth.isLoggedIn) {
-      return rejectWithValue('User not authenticated');
+      if (!auth.isLoggedIn) {
+        return rejectWithValue("User not authenticated");
+      }
+      if (!token) {
+        return rejectWithValue("No token found — please login again");
+      }
+
+      const headers = {
+        id: userId,
+        authorization: `Bearer ${token}`, // ✅ real token
+      };
+
+      const response = await axios.get("http://localhost:3000/api/get-user-cart", { headers });
+
+      return Array.isArray(response.data.data) ? response.data.data : [];
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.message || "Failed to load cart");
     }
-    const headers = {
-      id: localStorage.getItem('id'),
-      authorization: `Bearer ${localStorage.getItem('token')}`,
-    };
-    await axios.put(BASE_URL+'/api/add-to-cart', { bookId }, { headers });
-    // Refresh cart after adding
-    await dispatch(fetchCart()).unwrap();
-    return { bookId };
-  } catch (error) {
-    return rejectWithValue(error.response?.data?.message || 'Failed to add to cart');
   }
-});
+);
+
+// Remove Item From Cart
+export const removeFromCart = createAsyncThunk(
+  "cart/removeFromCart",
+  async (id, { getState, rejectWithValue, dispatch }) => {
+    try {
+      const { auth } = getState();
+      const token = localStorage.getItem("token");
+      const userId = localStorage.getItem("id");
+
+      if (!auth.isLoggedIn) {
+        return rejectWithValue("User not authenticated");
+      }
+      if (!token || !userId) {
+        return rejectWithValue("Missing credentials — login again");
+      }
+
+      const headers = {
+        id: userId,
+        authorization: `Bearer ${token}`,
+      };
+
+      const response = await axios.put(
+        `http://localhost:3000/api/remove-book-from-cart/${id}`,
+        {},
+        { headers }
+      );
+
+      // Refresh cart after delete
+      dispatch(fetchCart()); // 🔄
+
+      return { id, message: response.data.message };
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.message || "Delete failed");
+    }
+  }
+);
+
+// Add Item To Cart
+export const addToCart = createAsyncThunk(
+  "cart/addToCart",
+  async (bookid, { getState, rejectWithValue, dispatch }) => {
+    try {
+      const { auth } = getState();
+      const token = localStorage.getItem("token");
+      const userId = localStorage.getItem("id");
+
+      if (!auth.isLoggedIn) {
+        return rejectWithValue("User not authenticated");
+      }
+      if (!token || !userId) {
+        return rejectWithValue("Please login again");
+      }
+
+      const headers = {
+        id: userId,
+        authorization: `Bearer ${token}`,
+      };
+
+      const res = await axios.put("http://localhost:3000/api/add-to-cart", { bookid }, { headers });
+
+      // Refresh cart after add
+      dispatch(fetchCart()); // 🔄
+
+      return { bookid, message: res.data.message };
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.message || "Add to cart failed");
+    }
+  }
+);
 
 const cartSlice = createSlice({
-  name: 'cart',
+  name: "cart",
   initialState: {
     items: [],
     total: 0,
@@ -79,7 +116,7 @@ const cartSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      // Fetch cart
+      // Fetch Cart
       .addCase(fetchCart.pending, (state) => {
         state.isLoading = true;
         state.error = null;
@@ -95,7 +132,8 @@ const cartSlice = createSlice({
         state.items = [];
         state.total = 0;
       })
-      // Remove from cart
+
+      // Remove Item
       .addCase(removeFromCart.pending, (state) => {
         state.isLoading = true;
         state.error = null;
@@ -109,14 +147,13 @@ const cartSlice = createSlice({
         state.isLoading = false;
         state.error = action.payload;
       })
-      // Add to cart
+
+      // Add Item
       .addCase(addToCart.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(addToCart.fulfilled, (state) => {
-        state.isLoading = false;
-      })
+
       .addCase(addToCart.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;

@@ -1,21 +1,103 @@
-import React from 'react'
-import { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link ,useNavigate} from 'react-router-dom';
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import {authActions} from  "../store/auth";
 import { useDispatch } from 'react-redux';
 import axios from 'axios'
 import { getBaseUrl } from '../utils/config.js';
+
 export default function Login() {
+  const G_clientId=import.meta.env.VITE_GOOGLE_CLIENT_ID;
   const BASE_URL=getBaseUrl()
   const dispatch=useDispatch();
   const [showPassword,setShowPassword]=useState(false);
   const navigate=useNavigate();
   const [values,setValues]=useState({Username:"",password:""});
+  const [googleError, setGoogleError] = useState('');
+
   const change=(e)=>{
     const {name,value}=e.target;
     setValues({...values,[name]:value});
   }
+
+  const handleGoogleSuccess = async (response) => {
+    const token = response.credential;
+    try {
+      const res = await axios.post(`${BASE_URL}/api/sign-in/google`, { token });
+      if (res.data.success) {
+        dispatch(authActions.login());
+        dispatch(authActions.changeRole(res.data.role));
+        localStorage.setItem("id", res.data.id);
+        localStorage.setItem("token", res.data.token);
+        localStorage.setItem("role", res.data.role);
+        alert("Google login successful");
+        navigate("/profile");
+      } else {
+        setGoogleError('Google login failed');
+      }
+    } catch (err) {
+      console.error(err);
+      setGoogleError('Google login failed');
+    }
+  };
+
+  const handleGoogleError = () => {
+    setGoogleError('Google login cancelled or failed');
+  };
+
+  useEffect(() => {
+    // Load Google Identity Services script if not loaded
+    if (!window.google) {
+      const script = document.createElement('script');
+      script.src = 'https://accounts.google.com/gsi/client';
+      script.async = true;
+      script.defer = true;
+      document.body.appendChild(script);
+
+      script.onload = () => {
+        // Initialize after script loads
+        window.google.accounts.id.initialize({
+          client_id:G_clientId,
+          callback: handleGoogleSuccess,
+          auto_select: false,
+          cancel_on_tap_outside: true,
+        });
+
+        window.google.accounts.id.renderButton(
+          document.getElementById('google-login-button'),
+          {
+            type: 'standard',
+            theme: 'outline',
+            size: 'large',
+            text: 'signin_with',
+            shape: 'rectangular',
+            logo_alignment: 'left',
+          }
+        );
+      };
+    } else {
+      // If already loaded, initialize
+      window.google.accounts.id.initialize({
+        client_id: G_clientId,
+        callback: handleGoogleSuccess,
+        auto_select: false,
+        cancel_on_tap_outside: true,
+      });
+
+      window.google.accounts.id.renderButton(
+        document.getElementById('google-login-button'),
+        {
+          type: 'standard',
+          theme: 'outline',
+          size: 'large',
+          text: 'signin_with',
+          shape: 'rectangular',
+          logo_alignment: 'left',
+        }
+      );
+    }
+  }, []);
+
   const handleSubmit = async (e) => {
   e.preventDefault();
   try {
@@ -24,7 +106,7 @@ export default function Login() {
       return;
     }
 
-    const response = await axios.post(BASE_URL+"/api/login", values);
+    const response = await axios.post(`http://localhost:3000/api/login`, values);
 
     if (response.status === 200) {
       dispatch(authActions.login());
@@ -87,6 +169,9 @@ export default function Login() {
            <div className='mt-4'>
              <button className='w-full bg-blue-500 text-white font-semibold py-2 rounded hover:bg-zinc-400 ' onClick={handleSubmit}>Login</button>
            </div>
+           <p className='flex mt-4 items-center justify-center text-zinc-200 font-semibold'>Or</p>
+           <div id="google-login-button" className="mt-4"></div>
+           {googleError && <p className="text-red-500 text-center mt-2">{googleError}</p>}
            <p className='flex mt-4 items-center justify-center text-zinc-500 font-semibold'>create a new account? &nbsp;
              <Link to='/sign-up' className='hover:text-blue-500'><u>SignUp</u></Link>
            </p>
