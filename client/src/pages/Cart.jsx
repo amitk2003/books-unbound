@@ -1,16 +1,21 @@
 // src/components/Cart.jsx
-import React, { useEffect } from "react";
+import React, { useEffect,useState} from "react";
 import { useSelector, useDispatch } from "react-redux";
 import emptyCart from "../assets/empty-cart.png";
 import Loader from "../components/Loader/Loader.jsx";
 import { MdDelete } from "react-icons/md";
 import { fetchCart, removeFromCart } from "../store/cart.js";
+import axios from "axios"
+import { useNavigate } from "react-router-dom";
+
 
 const Cart = () => {
   const dispatch = useDispatch();
   const { items: cart, total, isLoading, error } = useSelector((state) => state.cart);
   const { isLoggedIn } = useSelector((state) => state.auth);
-
+  const [orderPlaced,setOrderPlaced]=useState(false)
+  const [placingorder,setPlacingOrder] =useState(false)
+  const navigate=useNavigate();
   useEffect(() => {
     if (isLoggedIn) {
       dispatch(fetchCart());
@@ -26,6 +31,39 @@ const Cart = () => {
       }
     });
   };
+
+  const placeOrder=async()=>{
+    
+      try{
+        setPlacingOrder(true)
+        const res=await axios.post(`http://localhost:3000/api/place-order`,{
+          book_order:cart.map(item=>(
+            {
+              _id:item._id
+            })
+          )},{headers:{id:localStorage.getItem("id"),
+        Authorization:`Bearer ${localStorage.getItem("token")}`}}
+          
+        )
+        setOrderPlaced(true)
+        alert(res.data.message || "order placed successfully")
+      }catch(error){
+        console.log(error)
+        alert("failed to place order")
+      }
+      finally{
+        setPlacingOrder(false)
+      }
+      dispatch(fetchCart())
+     setTimeout(()=>{
+      navigate('/profile/orderHistory')
+     },4000) 
+
+        // setOrderPlaced(res.data.message)
+
+    
+      // } catch(error){}
+  }
 
   return (
     <>
@@ -81,9 +119,41 @@ const Cart = () => {
             </div>
           ))}
 
-          <div className="mt-8 text-2xl text-zinc-100 font-semibold">
-            Total: {total}₹
-          </div>
+          
+          <div className="mt-10 w-full md:w-[60%] mx-auto bg-zinc-900 border border-zinc-700 rounded-xl p-6 flex flex-col md:flex-row items-center justify-between shadow-lg">
+
+  {/* Total Section */}
+  <div className="flex flex-col text-center md:text-left">
+    <span className="text-sm text-zinc-400 uppercase tracking-wide">
+      Total Amount
+    </span>
+    <span className="text-3xl font-bold text-zinc-100 mt-1">
+      ₹{total}
+    </span>
+  </div>
+
+  {/* Action Section */}
+  {!orderPlaced ? (
+    <button
+      onClick={placeOrder}
+      disabled={placingorder}
+      className={`mt-4 md:mt-0 px-8 py-3 rounded-lg text-lg font-semibold transition-all duration-200
+        ${
+          placingorder
+            ? "bg-zinc-600 cursor-not-allowed text-zinc-300"
+            : "bg-green-600 hover:bg-green-500 text-white shadow-md hover:shadow-lg"
+        }`}
+    >
+      {placingorder ? "Placing Order..." : "Place Order"}
+    </button>
+  ) : (
+    <div className="mt-4 md:mt-0 text-green-500 text-lg font-semibold flex items-center gap-2">
+      ✅ Order placed successfully
+    </div>
+  )}
+</div>
+
+
         </div>
       )}
     </>

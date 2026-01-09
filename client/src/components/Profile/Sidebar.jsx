@@ -22,7 +22,7 @@ const Sidebar = ({ data }) => {
   };
 
   return (
-    <div className='bg-zinc-800 p-4 rounded flex flex-col items-center justify-center w-full lg:w-64'>
+    <div className='bg-zinc-800 p-4 rounded flex flex-col items-center justify-center w-full lg:w-64 top--8'>
       <div className='flex items-center flex-col justify-center w-full'>
         <img
           src={data?.avatar || '/default-avatar.png'}

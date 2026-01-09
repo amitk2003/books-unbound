@@ -36,18 +36,18 @@ const UserSchema= new mongoose.Schema({
         enum:['user','admin'],
     },
     favourites:[
-        { type:mongoose.Types.ObjectId,
+        { type:mongoose.Schema.Types.ObjectId,
             ref:'bookinfo',
         },
     ],
     cart:[
-        { type:mongoose.Types.ObjectId,
+        { type:mongoose.Schema.Types.ObjectId,
             ref:'bookinfo',
         },
     ],
     order:[
-        { type:mongoose.Types.ObjectId,
-            ref:"order",
+        { type:mongoose.Schema.Types.ObjectId,
+            ref:"OrderData",
         },
     ],
 
