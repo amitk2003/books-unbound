@@ -1,9 +1,8 @@
 // src/store/cart.js
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
-import { getBaseUrl } from "../utils/config.js";
 
-const BASE_URL = getBaseUrl();
+
+import api from "../api/axios";
 
 // Fetch Cart Items
 export const fetchCart = createAsyncThunk(
@@ -26,7 +25,7 @@ export const fetchCart = createAsyncThunk(
         authorization: `Bearer ${token}`, // ✅ real token
       };
 
-      const response = await axios.get("http://localhost:3000/api/get-user-cart", { headers });
+      const response = await api.get("/api/get-user-cart", { headers });
 
       return Array.isArray(response.data.data) ? response.data.data : [];
     } catch (err) {
@@ -56,8 +55,8 @@ export const removeFromCart = createAsyncThunk(
         authorization: `Bearer ${token}`,
       };
 
-      const response = await axios.put(
-        `http://localhost:3000/api/remove-book-from-cart/${id}`,
+      const response = await api.put(
+        `/api/remove-book-from-cart/${id}`,
         {},
         { headers }
       );
@@ -93,7 +92,7 @@ export const addToCart = createAsyncThunk(
         authorization: `Bearer ${token}`,
       };
 
-      const res = await axios.put("http://localhost:3000/api/add-to-cart", { bookid }, { headers });
+      const res = await api.put(`/api/add-to-cart`, { bookid }, { headers });
 
       // Refresh cart after add
       dispatch(fetchCart()); // 🔄

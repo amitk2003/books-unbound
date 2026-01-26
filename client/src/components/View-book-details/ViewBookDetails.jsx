@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
-import Bookcard from "../Bookcard/Bookcard.jsx";
+import api from "../../api/axios.js";
 import { MdDelete } from "react-icons/md";
 import Loader from "../Loader/Loader.jsx";
 import { GrLanguage } from "react-icons/gr";
 import { FaShoppingCart,FaEdit } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa";
 import { useSelector } from "react-redux";
-import { getBaseUrl } from "../../utils/config.js";
+
 const ViewBookDetails = () => {
   const BASE_URL=getBaseUrl()
   const { id } = useParams();
@@ -20,7 +19,7 @@ const ViewBookDetails = () => {
   
   useEffect(() => {
     const fetch = async () => {
-      const Response = await axios.get(
+      const Response = await api.get(
         `/api/get-book-by-id/${id}`
       );
       console.log(Response);

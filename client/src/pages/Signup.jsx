@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { getBaseUrl } from '../utils/config.js';
+import api from '../api/axios';
 
 export default function Signup() {
   const GClient_id=import.meta.env.VITE_GOOGLE_CLIENT_ID;
@@ -27,7 +27,7 @@ export default function Signup() {
   const handleGoogleSuccess = useCallback(async (response) => {
     const token = response.credential;
     try {
-      const res = await axios.post(`http://localhost:3000/api/sign-up/google`, { token });
+      const res = await api.post(`/api/sign-up/google`, { token });
       if (res.data.success) {
         localStorage.setItem('token', res.data.token);
         alert("Google signup successful!");
@@ -118,7 +118,7 @@ useEffect(() => {
         alert("Please fill all the fields");
         return;
       } else {
-        const response = await axios.post(`http://localhost:3000/api/sign-up`, values);
+        const response = await api.post(`/api/sign-up`, values);
         console.log(response.data);
         if (response.status === 200) {
           alert("user created successfully");

@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import Bookcard from '../Bookcard/Bookcard.jsx';
-import { getBaseUrl } from '../../utils/config.js';
+import api from '../../api/axios.js';
 const Favourites = () => {
   const [favouriteBook, setFavouriteBook] = useState([]);
   const headers = {
     id: localStorage.getItem("id"),
     authorization: `Bearer ${localStorage.getItem("token")}`,
   };
-  const BASE_URL=getBaseUrl()
+  
   useEffect(() => {
     const fetch = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/get-favourite-books", { headers });
+        const response = await api.get(`/api/get-favourite-books`, { headers });
         setFavouriteBook(response.data.data);
         console.log(response.data);
       } catch (error) {

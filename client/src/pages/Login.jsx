@@ -3,8 +3,7 @@ import { Link ,useNavigate} from 'react-router-dom';
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import {authActions} from  "../store/auth";
 import { useDispatch } from 'react-redux';
-import axios from 'axios'
-import { getBaseUrl } from '../utils/config.js';
+import api from "../api/axios"
 
 export default function Login() {
   const G_clientId=import.meta.env.VITE_GOOGLE_CLIENT_ID;
@@ -23,7 +22,7 @@ export default function Login() {
   const handleGoogleSuccess = async (response) => {
     const token = response.credential;
     try {
-      const res = await axios.post(`${BASE_URL}/api/sign-in/google`, { token });
+      const res = await api.post(`/api/sign-in/google`, { token });
       if (res.data.success) {
         dispatch(authActions.login());
         dispatch(authActions.changeRole(res.data.role));
@@ -106,7 +105,7 @@ export default function Login() {
       return;
     }
 
-    const response = await axios.post(`http://localhost:3000/api/login`, values);
+    const response = await api.post(`/api/login`, values);
 
     if (response.status === 200) {
       dispatch(authActions.login());

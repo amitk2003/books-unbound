@@ -2,21 +2,17 @@ import React,{useEffect,useState} from 'react'
 import Sidebar from '../components/Profile/Sidebar.jsx'
 import {Outlet} from 'react-router-dom'
 // import { useSelector } from 'react-redux'
-import axios from 'axios'
+import api from '../api/axios.js'
 import Loader from '../components/Loader/Loader.jsx'
-import { getBaseUrl } from '../utils/config.js';
-// const BASE_URL=getBaseUrl()
+
 export default function Profile() {
   // const isLoggedIn= useSelector();
   const [profile,setProfile]=useState(null);
-  const headers={
-    "id":localStorage.getItem("id"),
-    "Authorization":`Bearer ${localStorage.getItem("token")}`
-  };
+ 
    useEffect(() => {
   const fetchProfile = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/api/get-userInfo", {
+      const response = await api.get(`/api/get-userInfo`, {
         headers: {
           "id": localStorage.getItem("id"),
           "Authorization": `Bearer ${localStorage.getItem("token")}`

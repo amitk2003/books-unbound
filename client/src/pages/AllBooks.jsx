@@ -3,15 +3,15 @@ import Loader from "../components/Loader/Loader";
 import Bookcard from "../components/Bookcard/Bookcard";
 import axios from "axios";
 import { motion } from "framer-motion";
-import { getBaseUrl } from "../utils/config";
+import api from "../api/axios"
 
 export default function AllBooks() {
   const [book, setBook] = useState();
  
-  const BASE_URL=getBaseUrl()
+ 
   useEffect(() => {
     const fetch = async () => {
-      const Response = await axios.get("http://localhost:3000/api/get-all");
+      const Response = await api.get("http://localhost:3000/api/get-all");
       setBook(Response.data.data);
     };
     fetch();

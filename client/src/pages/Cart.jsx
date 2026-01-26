@@ -5,7 +5,7 @@ import emptyCart from "../assets/empty-cart.png";
 import Loader from "../components/Loader/Loader.jsx";
 import { MdDelete } from "react-icons/md";
 import { fetchCart, removeFromCart } from "../store/cart.js";
-import axios from "axios"
+import api from "../api/axios.js";
 import { useNavigate } from "react-router-dom";
 
 
@@ -36,7 +36,7 @@ const Cart = () => {
     
       try{
         setPlacingOrder(true)
-        const res=await axios.post(`http://localhost:3000/api/place-order`,{
+        const res=await api.post(`http://localhost:3000/api/place-order`,{
           book_order:cart.map(item=>(
             {
               _id:item._id

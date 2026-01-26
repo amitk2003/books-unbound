@@ -3,15 +3,15 @@ import axios from "axios";
 import Bookcard from "../Bookcard/Bookcard.jsx";
 import Loader from "../Loader/Loader.jsx";
 import { motion } from "framer-motion";
-import { getBaseUrl } from "../../utils/config.js";
+import api from "../../api/axios.js";
 export default function RecentlyAdded() {
   const [book, setBook] = useState([]); // ✅ start as empty array
   const [loading, setLoading] = useState(true); // ✅ loading state
-  const BASE_URL=getBaseUrl()
+  
   useEffect(() => {
     const fetch = async () => {
       try {
-        const Response = await axios.get(BASE_URL+"/api/get-recent-book");
+        const Response = await api.get(`/api/get-recent-book`);
         setBook(Response.data.data || []); // ✅ safe fallback
       } catch (error) {
         console.error("Error fetching recent books:", error);
