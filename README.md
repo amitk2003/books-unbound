@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 # 📚 Books Unbound
 
 ## 🧭 Overview
