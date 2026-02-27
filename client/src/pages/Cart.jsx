@@ -36,7 +36,7 @@ const Cart = () => {
     
       try{
         setPlacingOrder(true)
-        const res=await api.post(`http://localhost:3000/api/place-order`,{
+        const res=await api.post(`/api/place-order`,{
           book_order:cart.map(item=>(
             {
               _id:item._id

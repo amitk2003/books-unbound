@@ -11,7 +11,7 @@ export default function AllBooks() {
  
   useEffect(() => {
     const fetch = async () => {
-      const Response = await api.get("http://localhost:3000/api/get-all");
+      const Response = await api.get("/api/get-all");
       setBook(Response.data.data);
     };
     fetch();

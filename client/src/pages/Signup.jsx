@@ -6,8 +6,8 @@ import { useNavigate } from 'react-router-dom';
 import api from '../api/axios';
 
 export default function Signup() {
-  const GClient_id=import.meta.env.VITE_GOOGLE_CLIENT_ID;
-  const BASE_URL = getBaseUrl();
+//   const GClient_id=import.meta.env.VITE_GOOGLE_CLIENT_ID;
+ 
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const [values, setValues] = useState({
@@ -16,98 +16,95 @@ export default function Signup() {
     password: "",
     address: "",
   });
-  const [googleError, setGoogleError] = useState('');
-  const [scriptLoaded, setScriptLoaded] = useState(false); // Track if Google script is ready
+//   const [googleError, setGoogleError] = useState('');
+//   const [scriptLoaded, setScriptLoaded] = useState(false); // Track if Google script is ready
 
   const change = (e) => {
     const { name, value } = e.target;
     setValues({ ...values, [name]: value });
   };
 
-  const handleGoogleSuccess = useCallback(async (response) => {
-    const token = response.credential;
-    try {
-      const res = await api.post(`/api/sign-up/google`, { token });
-      if (res.data.success) {
-        localStorage.setItem('token', res.data.token);
-        alert("Google signup successful!");
-        navigate('/dashboard');
-      } else {
-        setGoogleError('Google signup failed');
-      }
-    } catch (err) {
-      console.error(err);
-      setGoogleError('Google signup failed');
-    }
-  }, [navigate, BASE_URL]);
+//   const handleGoogleSuccess = useCallback(async (response) => {
+//     const token = response.credential;
+//     try {
+//       const res = await api.post(`/api/sign-up/google`, { token });
+//       if (res.data.success) {
+//         localStorage.setItem('token', res.data.token);
+//         alert("Google signup successful!");
+//         navigate('/dashboard');
+//       } else {
+//         setGoogleError('Google signup failed');
+//       }
+//     } catch (err) {
+//       console.error(err);
+//       setGoogleError('Google signup failed');
+//     }
+//   }, [navigate,api]);
 
-  const handleGoogleError = useCallback(() => {
-    setGoogleError('Google signup cancelled or failed');
-  }, []);
+//   const handleGoogleError = useCallback(() => {
+//     setGoogleError('Google signup cancelled or failed');
+//   }, []);
 
-  const initializeGoogleSignIn = useCallback(() => {
-    if (!window.google?.accounts?.id) {
-      console.warn('Google Identity Services not available');
-      setGoogleError('Google services unavailable. Please refresh the page.');
-      return;
-    }
+//   const initializeGoogleSignIn = useCallback(() => {
+//     if (!window.google?.accounts?.id) {
+//       console.warn('Google Identity Services not available');
+//       setGoogleError('Google services unavailable. Please refresh the page.');
+//       return;
+//     }
 
-    window.google.accounts.id.initialize({
-      client_id: GClient_id,
-      callback: handleGoogleSuccess,
-      auto_select: false,
-      cancel_on_tap_outside: true,
-    });
+//     window.google.accounts.id.initialize({
+//       client_id: GClient_id,
+//       callback: handleGoogleSuccess,
+//       auto_select: false,
+//       cancel_on_tap_outside: true,
+//     });
 
-    const buttonDiv = document.getElementById('google-signup-button');
-    if (buttonDiv) {
-      window.google.accounts.id.renderButton(buttonDiv, {
-        type: 'standard',
-        theme: 'outline',
-        size: 'large',
-        text: 'signup_with',
-        shape: 'rectangular',
-        logo_alignment: 'left',
-      });
-      setScriptLoaded(true);
-    }
-  }, [handleGoogleSuccess]);
+//     const buttonDiv = document.getElementById('google-signup-button');
+//     if (buttonDiv) {
+//       window.google.accounts.id.renderButton(buttonDiv, {
+//         type: 'standard',
+//         theme: 'outline',
+//         size: 'large',
+//         text: 'signup_with',
+//         shape: 'rectangular',
+//         logo_alignment: 'left',
+//       });
+//       setScriptLoaded(true);
+//     }
+//   }, [handleGoogleSuccess]);
 
-    // Cleanup: Remove script on unmount (optional)
-    // return () => {
-    //   if (script && script.parentNode) {
-    //     script.parentNode.removeChild(script);
-    //   }
-    // };
-// In useEffect remove duplicate appending
-    // Load Google script once on mount
-useEffect(() => {
-  // Check if script already exists
-  const existingScript = document.querySelector('script[src="https://accounts.google.com/gsi/client"]');
-  if (existingScript) {
-    initializeGoogleSignIn();
-    setScriptLoaded(true);
-    return;
-  }
+//     // Cleanup: Remove script on unmount (optional)
+//     // return () => {
+//     //   if (script && script.parentNode) {
+//     //     script.parentNode.removeChild(script);
+//     //   }
+//     // };
+// // In useEffect remove duplicate appending
+//     // Load Google script once on mount
+// useEffect(() => {
+//   const existingScript = document.querySelector(
+//     'script[src="https://accounts.google.com/gsi/client"]'
+//   );
 
-  const script = document.createElement('script');
-  script.src = 'https://accounts.google.com/gsi/client';
-  script.async = true;
-  script.defer = true;
-  script.onload = initializeGoogleSignIn;
-  script.onerror = () => {
-    console.error('Failed to load Google script');
-    setGoogleError('Failed to load Google services. Please check your connection.');
-  };
-  document.body.appendChild(script);
+//   if (existingScript) {
+//     initializeGoogleSignIn();
+//     return;
+//   }
 
-  // Cleanup on unmount
-  return () => {
-    if (script.parentNode) {
-      script.parentNode.removeChild(script);
-    }
-  };
-}, [initializeGoogleSignIn]); // Depend on initialize fn
+//   const script = document.createElement('script');
+//   script.src = 'https://accounts.google.com/gsi/client';
+//   script.async = true;
+//   script.defer = true;
+//   script.onload = initializeGoogleSignIn;
+//   script.onerror = () => {
+//     setGoogleError(
+//       'Failed to load Google services. Please check your connection.'
+//     );
+//   };
+
+//   document.body.appendChild(script);
+
+// }, [initializeGoogleSignIn]);
 
 
   const submit = async (e) => {
@@ -210,11 +207,11 @@ return (
 
         <p className='flex mt-4 items-center justify-center text-zinc-200 font-semibold'>Or</p>
 
-        <div id='google-signup-button' className='mt-4'>
+        {/* <div id='google-signup-button' className='mt-4'>
           {!scriptLoaded && <p className='text-zinc-400 text-center'>Loading Google Sign-In...</p>}
-        </div>
+        </div> */}
 
-        {googleError && <p className='text-red-500 text-center mt-2'>{googleError}</p>}
+        {/* {googleError && <p className='text-red-500 text-center mt-2'>{googleError}</p>} */}
 
         <p className='flex mt-4 items-center justify-center text-zinc-500 font-semibold'>
           Already have an Account? &nbsp;

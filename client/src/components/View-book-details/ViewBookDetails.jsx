@@ -9,7 +9,7 @@ import { FaRegHeart } from "react-icons/fa";
 import { useSelector } from "react-redux";
 
 const ViewBookDetails = () => {
-  const BASE_URL=getBaseUrl()
+ 
   const { id } = useParams();
   const [book, setBook] = useState();
   // to run every api in project need to use useEffect
@@ -46,7 +46,7 @@ const handleAddToFavourite = async () => {
   console.log('Frontend Sending:', { bookid: id, tokenPreview: token.substring(0, 20) + '...' });
 
   try {
-    const response = await axios.put(
+    const response = await api.put(
       '/api/add-book-to-favourite',
       { bookid: id },
       { 
@@ -73,7 +73,7 @@ const handleAddToCart = async () => {
     return;
   }
   try {
-    const response = await axios.put(
+    const response = await api.put(
       '/api/add-to-cart',            // URL
       { bookid: id },                // Data: Body with bookid
       { 

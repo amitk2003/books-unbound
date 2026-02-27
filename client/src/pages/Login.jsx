@@ -7,7 +7,7 @@ import api from "../api/axios"
 
 export default function Login() {
   const G_clientId=import.meta.env.VITE_GOOGLE_CLIENT_ID;
-  const BASE_URL=getBaseUrl()
+
   const dispatch=useDispatch();
   const [showPassword,setShowPassword]=useState(false);
   const navigate=useNavigate();
