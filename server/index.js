@@ -17,7 +17,7 @@ app.use(bodyParser.urlencoded({extended:true}));
 app.use(express.json());
 app.use(
     cors({
-      origin:["http://localhost:5173","http://localhost:3000","https://books-unbound.onrender.com","https://books-unbound.vercel.app/"], // Change this to your frontend URL
+      origin:["http://localhost:5173","http://localhost:3000","https://books-unbound.onrender.com","https://books-unbound.vercel.app"], // Change this to your frontend URL
       methods: ['GET','POST','PUT','DELETE','Options'],
       credentials: true,
       allowedHeaders: ['Content-Type', 'Authorization', 'id']
