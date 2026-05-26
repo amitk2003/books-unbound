@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import api from "../api/axios"
 import Loader from "../components/Loader/Loader";
 import emptyCart from "../assets/empty-cart.png";
-const stripePromise = loadStripe("pk_test_51SEQGdH9izPYCzplfJ5wNqxCa6B2jZQeuYaliyYyqxvWAPINDCC5ILrDXLOruOnCvNOhEXFr6XTn6wiU2XuEaszW00wrsR8SLl");
+const stripePromise = loadStripe(import.meta.env.VITE_PUBLISHABLE_KEY);
 
 const Cart = () => {
   const dispatch = useDispatch();
@@ -39,7 +39,7 @@ const Cart = () => {
           book: item._id,
           title: item.title,
           price: item.price,
-          quantity: 1
+          quantity: item.quantity
         }))
       }, {
         headers: {
@@ -66,8 +66,10 @@ const Cart = () => {
       setPlacingOrder(true);
       await api.post("/api/place-order-cod", {
         books: cart.map(item => ({
+          title:item.title,
+          price:item.price,
           book: item._id,
-          quantity: 1
+          quantity: item.quantity
         }))
       }, {
         headers: {
