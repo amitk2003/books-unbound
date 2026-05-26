@@ -12,14 +12,16 @@ const UserSchema= new mongoose.Schema({
     },
     password:{
         type:String,
-        required:true,
+        required:"",
     },
     // if you want to update password via email
     resetPasswordToken: {
         type: String,
+        default:null,
     },
-    resetPasswordExpires: {
+    resetPasswordExpiry: {
         type: Date,
+        default:null
     },
     
     address:{
