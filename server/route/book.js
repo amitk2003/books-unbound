@@ -26,7 +26,10 @@ book.post("/add-book",authToken,async(req,res)=>{
             author:req.body.author,
             price:req.body.price,
             desc:req.body.desc,
-            language:req.body.language
+            language:req.body.language,
+            genre:req.body.genre,
+            stock:req.body.stock,
+            rating:req.body.rating
         });
         console.log(req.body)
         await book.save();
@@ -78,7 +81,10 @@ book.put("/update-book", authToken,async(req,res)=>{
             author:req.body.author,
             price:req.body.price,
             desc:req.body.desc,
-            language:req.body.language
+            language:req.body.language,
+            genre:req.body.genre,
+            stock:req.body.stock,
+            rating:req.body.rating
         });
         return res.status(200).json({message:"books updated successfully"})
 
@@ -107,7 +113,15 @@ book.delete("/delete-book",async(req,res)=>{
 book.get("/get-all",async(req,res)=>{
    // reason to add all books
    try{
-    const books=await bookinfo.find().sort({createdAt: -1});
+    const { search, genre } = req.query;
+    let query = {};
+    if (search) {
+        query.title = { $regex: search, $options: "i" };
+    }
+    if (genre && genre !== "All") {
+        query.genre = genre;
+    }
+    const books=await bookinfo.find(query).sort({createdAt: -1});
    return res.json({ status:"success", data:books});
 
    }catch(error){

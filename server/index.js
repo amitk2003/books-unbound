@@ -6,6 +6,7 @@ import book from "./route/book.js"
 import fav from "./route/faviourite.js"
 import cart_route from "./route/cart.js";
 import order_route from "./route/order.js"
+import review_route from "./route/review.js";
 import cors from "cors"
 import router from "./route/user_credentials.js";
 const app=express();
@@ -39,6 +40,7 @@ app.use("/api",book);
 app.use("/api",fav);
 app.use("/api",cart_route);
 app.use("/api",order_route);
+app.use("/api",review_route);
 
 
 

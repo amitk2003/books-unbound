@@ -25,9 +25,24 @@ language:{
     type:String,
     required:true,
 },
-
-
-
+genre: {
+    type: String,
+    required: true,
+    default: "Fiction",
+},
+stock: {
+    type: Number,
+    required: true,
+    default: 10,
+},
+rating: {
+    type: Number,
+    default: 4.5,
+},
+reviews_count: {
+    type: Number,
+    default: 0,
+},
 },
 { timestamps: true}
 );

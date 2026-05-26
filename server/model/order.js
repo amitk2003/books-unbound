@@ -7,10 +7,29 @@ const OrderSchema= new mongoose.Schema({
         required:true,
 
     },
-    book:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:'bookinfo',
-        required:true
+    books:[
+        {
+            book:{
+                type:mongoose.Schema.Types.ObjectId,
+                ref:'bookinfo'
+            },
+            quantity:{
+                type:Number,
+                default:1
+            }
+        }
+    ],
+    paymentType:{
+        type:String,
+        enum:["COD","ONLINE"],
+        default:"COD",
+    },
+    paymentStatus:{
+        type:String,
+        enum:["Pending","Completed","Failed"],
+        default:"Pending",
+        
+
     },
     status:{
         type:String,
@@ -25,7 +44,12 @@ const OrderSchema= new mongoose.Schema({
   
     },
     // timestamps are used to sort order in correct sequences
-
+    deliveryOTP:{
+        type:String,
+    },
+    otpExpiry:{
+        type:Date,
+    }
 
 },
 { timestamps: true}

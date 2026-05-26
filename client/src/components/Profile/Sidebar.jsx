@@ -41,12 +41,28 @@ const Sidebar = ({ data }) => {
 
       {/* Links Section */}
       <div className={`w-full flex-col items-center justify-center ${isOpen ? 'flex' : 'hidden'} lg:flex mt-3`}>
-        <Link to="/profile" className="text-zinc-100 font-semibold w-full py-2 text-center hover:bg-zinc-700 rounded transition-all duration-300 block">
-          Favourites
-        </Link>
-        <Link to="/profile/orderHistory" className="text-zinc-100 font-semibold w-full py-2 text-center hover:bg-zinc-700 rounded transition-all duration-300 block">
-          Order History
-        </Link>
+        {data?.role === 'user' && (
+          <>
+            <Link to="/profile" className="text-zinc-100 font-semibold w-full py-2 text-center hover:bg-zinc-700 rounded transition-all duration-300 block">
+              Favourites
+            </Link>
+            <Link to="/profile/orderHistory" className="text-zinc-100 font-semibold w-full py-2 text-center hover:bg-zinc-700 rounded transition-all duration-300 block">
+              Order History
+            </Link>
+          </>
+        )}
+        
+        {data?.role === 'admin' && (
+          <>
+            <Link to="/profile/all-orders" className="text-zinc-100 font-semibold w-full py-2 text-center hover:bg-zinc-700 rounded transition-all duration-300 block">
+              All Orders
+            </Link>
+            <Link to="/profile/add-book" className="text-zinc-100 font-semibold w-full py-2 text-center hover:bg-zinc-700 rounded transition-all duration-300 block">
+              Add Book
+            </Link>
+          </>
+        )}
+
         <Link to="/profile/settings" className="text-zinc-100 font-semibold w-full py-2 text-center hover:bg-zinc-700 rounded transition-all duration-300 block">
           Settings
         </Link>

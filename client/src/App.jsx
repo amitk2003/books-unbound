@@ -15,6 +15,11 @@ import { useEffect } from 'react';
 import Favourites from './components/Profile/Favourites';
 import UserOrderHistory from './components/Profile/UserOrderHistory';
 import Settings from './components/Profile/Settings';
+import AllOrders from './components/Profile/AllOrders';
+import AddBook from './components/Profile/AddBook';
+import UpdateBook from './components/Profile/UpdateBook';
+import Success from './pages/Success';
+import Cancel from './pages/Cancel';
 
 function App() {
   const dispatch = useDispatch();
@@ -42,13 +47,26 @@ function App() {
           <Route path="/all-books" element={<AllBooks />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/profile" element={<Profile />}>
-            <Route index element={<Favourites />} />
+            {role === "user" ? (
+              <Route index element={<Favourites />} />
+            ) : (
+              <Route index element={<AllOrders />} />
+            ) }
+            {role === "admin" && (
+              <>
+                <Route path="/profile/add-book" element={<AddBook />} />
+                <Route path="/profile/all-orders" element={<AllOrders />} />
+                <Route path="/profile/update-book/:id" element={<UpdateBook />} />
+              </>
+            )}
             <Route path="/profile/orderHistory" element={<UserOrderHistory />} />
             <Route path="/profile/settings" element={<Settings />} />
           </Route>
           <Route path="/login" element={<Login />} />
           <Route path="/sign-up" element={<Signup />} />
           <Route path="/view-book-details/:id" element={<ViewBookDetails />} />
+          <Route path="/success" element={<Success />} />
+          <Route path="/cancel" element={<Cancel />} />
         </Routes>
       </main>
 
